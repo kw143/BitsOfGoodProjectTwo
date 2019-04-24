@@ -1,7 +1,9 @@
 import React from 'react';
 import TodoList from "./TodoList";
 import InputLine from "./InputLine";
+import axios from "axios";
 
+const apiUrl = "http://localhost:3001/todos";
 const dummyData = [{taskText: "Do Laundry", completed: false}, {taskText: "Sleep", completed: true}, {taskText: "Eat", completed: false}, {taskText: "Die", completed: false}];
 
 class TodoApp extends React.Component {
