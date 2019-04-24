@@ -12,6 +12,14 @@ class TodoApp extends React.Component {
             todos: []
         }
         this.addTodo = this.addTodo.bind(this);
+        this.removeTodo = this.removeTodo.bind(this);
+    }
+
+    removeTodo(index) {
+        dummyData.splice(index,1);
+        this.setState((state) => ({
+            todos: dummyData
+        }));
     }
 
     addTodo(task) {
@@ -32,7 +40,7 @@ class TodoApp extends React.Component {
         return (
             <div>
                 <InputLine onSubmit={this.addTodo}/>
-                <TodoList todos={this.state.todos}/>
+                <TodoList todos={this.state.todos} todoXClick={this.removeTodo}/>
             </div>
         );
     }

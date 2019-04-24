@@ -13,7 +13,7 @@ class Todo extends React.Component {
         return (
             <li>
                 <div>
-                    <button>x</button>
+                    <button onClick={this.props.xClick}>x</button>
                     <text>{(this.props.complete)?<strike>{this.props.task}</strike>: this.props.task}</text>
                 </div>
             </li>
