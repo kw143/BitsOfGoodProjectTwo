@@ -3,7 +3,7 @@ import TodoList from "./TodoList";
 import InputLine from "./InputLine";
 import axios from "axios";
 
-const apiUrl = "http://localhost:3001/todos";
+const apiUrl = "/todos";
 const dummyData = [{taskText: "Do Laundry", completed: false}, {taskText: "Sleep", completed: true}, {taskText: "Eat", completed: false}, {taskText: "Die", completed: false}];
 
 class TodoApp extends React.Component {
@@ -33,10 +33,17 @@ class TodoApp extends React.Component {
     }
 
     addTodo(task) {
-        dummyData.push({taskText: task, completed: false});
+        axios.post(apiUrl + '/add', {taskText: task, completed: false})
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        /*dummyData.push({taskText: task, completed: false});
         this.setState((state) => ({
             todos: dummyData
-        }));
+        }));*/
     }
 
     componentDidMount() {
