@@ -4,7 +4,6 @@ import InputLine from "./InputLine";
 import axios from "axios";
 
 const apiUrl = "/todos";
-const dummyData = [{taskText: "Do Laundry", completed: false}, {taskText: "Sleep", completed: true}, {taskText: "Eat", completed: false}, {taskText: "Die", completed: false}];
 
 class TodoApp extends React.Component {
 
@@ -18,38 +17,58 @@ class TodoApp extends React.Component {
         this.checkTask = this.checkTask.bind(this);
     }
 
-    checkTask(index) {
-        dummyData[index].completed = !dummyData[index].completed;
-        this.setState((state) => ({
-            todos: dummyData
-        }));
+    checkTask(id) {
+        axios.post(apiUrl + "/toggle")
+            .then(function (response) {
+                this.setState({
+                    todos: this.state.todos.filter(item => {
+                        if (item.id == id) {
+                            item.completed = !item.completed;
+                        }
+                    })
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
-    removeTodo(index) {
-        dummyData.splice(index,1);
-        this.setState((state) => ({
-            todos: dummyData
-        }));
+    removeTodo(id) {
+        axios.post(apiUrl + "/remove")
+            .then(function (response) {
+                let newArray = response.data.filter(item => {
+                    if (item.id == id) {
+                        item.completed = !item.completed;
+                    }
+                });
+                this.setState({todos: newArray});
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     addTodo(task) {
         axios.post(apiUrl + '/add', {taskText: task, completed: false})
             .then(function (response) {
-                this.setState({ todos: this.state.todos.concat(response.data)});
+                let newArray = response.data.splice(response.data.findIndex((item) => {
+                    return item.id == id;
+                }), 1);
+                this.setState({todos: newArray});
             })
             .catch(function (error) {
                 console.log(error);
             });
-        /*dummyData.push({taskText: task, completed: false});
-        this.setState((state) => ({
-            todos: dummyData
-        }));*/
     }
 
     componentDidMount() {
-        this.setState((state) => ({
-            todos: dummyData
-        }));
+        axios.get(apiUrl + '/all')
+            .then(function (response) {
+                this.setState({todos: this.state.todos.concat(response.data)});
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
 
