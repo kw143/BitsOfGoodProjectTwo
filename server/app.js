@@ -8,6 +8,9 @@ const mongoose = require("mongoose");
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const todosRouter = require('./routes/todos');
+const cors = require('cors');
+
+
 
 const app = express();
 
@@ -20,6 +23,7 @@ mongoose.connection.on("error", err => {
     process.exit(1);
 });
 
+app.use(cors()) // Use this after the variable declaration
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -7,8 +7,12 @@ const testTodo = new TodoItem({
 });
 
 
-router.get('/add', (req, res) => {
-    testTodo.save()
+router.post('/add', (req, res) => {
+    const toBeAdded = new TodoItem({
+       task: req.body.taskText,
+       completed: req.body.completed
+    });
+    toBeAdded.save()
         .then(response => {
             res.send(response);
         })

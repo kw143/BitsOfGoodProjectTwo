@@ -35,7 +35,7 @@ class TodoApp extends React.Component {
     addTodo(task) {
         axios.post(apiUrl + '/add', {taskText: task, completed: false})
             .then(function (response) {
-                console.log(response);
+                this.setState({ todos: this.state.todos.concat(response.data)});
             })
             .catch(function (error) {
                 console.log(error);
