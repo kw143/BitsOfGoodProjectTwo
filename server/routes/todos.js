@@ -18,4 +18,25 @@ router.post('/add', (req, res) => {
         });
 });
 
+router.get('/all', (req, res) => {
+    TodoItem.find(function (error, results) {
+        res.send(results);
+    });
+});
+
+router.post('/remove', (req, res) => {
+    TodoItem.findOneAndDelete({_id: req.body.id}, function (error, results) {
+    }).then(_ => {TodoItem.find(function (error, results) {
+        res.send(results);
+    });});
+
+});
+
+router.post('/toggle', (req, res) => {
+    TodoItem.findOneAndUpdate({_id: req.body.id}, {completed: !req.body.complete}).then(_ => {TodoItem.find(function (error, results) {
+        res.send(results);
+    });});
+
+});
+
 module.exports = router;

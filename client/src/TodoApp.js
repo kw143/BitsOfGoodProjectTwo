@@ -15,18 +15,13 @@ class TodoApp extends React.Component {
         this.addTodo = this.addTodo.bind(this);
         this.removeTodo = this.removeTodo.bind(this);
         this.checkTask = this.checkTask.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
-    checkTask(id) {
-        axios.post(apiUrl + "/toggle")
-            .then(function (response) {
-                this.setState({
-                    todos: this.state.todos.filter(item => {
-                        if (item.id == id) {
-                            item.completed = !item.completed;
-                        }
-                    })
-                });
+    checkTask(id, complete) {
+        axios.post(apiUrl + "/toggle", {id: id, complete: complete})
+            .then((response) => {
+                this.setState({todos: response.data});
             })
             .catch(function (error) {
                 console.log(error);
@@ -34,14 +29,9 @@ class TodoApp extends React.Component {
     }
 
     removeTodo(id) {
-        axios.post(apiUrl + "/remove")
-            .then(function (response) {
-                let newArray = response.data.filter(item => {
-                    if (item.id == id) {
-                        item.completed = !item.completed;
-                    }
-                });
-                this.setState({todos: newArray});
+        axios.post(apiUrl + "/remove", {id: id})
+            .then((response) => {
+                this.setState({todos: response.data});
             })
             .catch(function (error) {
                 console.log(error);
@@ -50,11 +40,8 @@ class TodoApp extends React.Component {
 
     addTodo(task) {
         axios.post(apiUrl + '/add', {taskText: task, completed: false})
-            .then(function (response) {
-                let newArray = response.data.splice(response.data.findIndex((item) => {
-                    return item.id == id;
-                }), 1);
-                this.setState({todos: newArray});
+            .then((response) => {
+                this.setState({ todos: this.state.todos.concat(response.data)});
             })
             .catch(function (error) {
                 console.log(error);
@@ -63,8 +50,8 @@ class TodoApp extends React.Component {
 
     componentDidMount() {
         axios.get(apiUrl + '/all')
-            .then(function (response) {
-                this.setState({todos: this.state.todos.concat(response.data)});
+            .then((response) => {
+                this.setState({todos: response.data});
             })
             .catch(function (error) {
                 console.log(error);
